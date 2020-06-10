@@ -8,9 +8,17 @@ document.getElementById("board").innerHTML = `
 <div>*************************************</div>`;
 
 var counter = 0;
+var clockCounter = 0;
+var timeoutID;
+var timeinterval;
+var width = 0;
+var id;
+
 var body = document.body,
   table = document.createElement("table");
-table.style.border = "3px solid black";
+
+var clock = document.getElementById("clockdiv");
+var elem = document.getElementById("InnerProgressBar");
 
 createtable();
 
@@ -24,11 +32,6 @@ function createtable() {
         var tableCell = tableRow.insertCell();
         var cellText = document.createTextNode("");
         tableCell.appendChild(cellText);
-        tableCell.style.border = "3px solid black";
-        tableCell.style.width = "70px";
-        tableCell.style.height = "70px";
-        tableCell.style.textAlign = "center";
-        tableCell.style.backgroundColor = "rgb(255,255,255)";
         if (i === 1 && j === 1) {
           tableCell.setAttribute("rowSpan", "1");
         }
@@ -53,11 +56,13 @@ function tableText(tableCell) {
   if (counter % 2 === 0) {
     if (tableCell.innerHTML === "") {
       tableCell.innerHTML = "X";
-      tableCell.style.backgroundColor = "rgb(255, 255, 255)";
-      //tableCell.style.fontFamily = "Helvetica";
-      tableCell.style.fontSize = "40px";
+      tableCell.style.backgroundColor = "rgb(124, 252, 0)";
+      ClearTimeout(this);
+      changeTurn(this);
+      //move();
       whoWon(table);
       checkDraw(table);
+
       counter++;
     } else {
       alert("Pick other cell!");
@@ -65,9 +70,10 @@ function tableText(tableCell) {
   } else {
     if (tableCell.innerHTML === "") {
       tableCell.innerHTML = "O";
-      tableCell.style.backgroundColor = "rgb(255, 255, 255)";
-      //tableCell.style.fontFamily = "Helvetica";
-      tableCell.style.fontSize = "40px";
+      tableCell.style.backgroundColor = "rgb(250, 128, 114)";
+      ClearTimeout(this);
+      changeTurn(this);
+      //move();
       whoWon(table);
       checkDraw(table);
       counter++;
@@ -151,12 +157,16 @@ function whoWon(table) {
       if (xORy[i] === "X") {
         alert("Player 1 won!");
         clearTable(table);
+        ClearTimeout();
+        clearWidth();
         counter = 1;
         break;
       }
       if (xORy[i] === "O") {
         alert("Player 2 won!");
         clearTable(table);
+        ClearTimeout();
+        clearWidth();
         counter = 1;
         break;
       }
@@ -168,6 +178,7 @@ function clearTable(table) {
   for (var i = 0; i < table.rows.length; i++) {
     for (var j = 0; j < table.rows[i].cells.length; j++) {
       table.rows[i].cells[j].innerHTML = "";
+      table.rows[i].cells[j].style.backgroundColor = "white";
     }
   }
 }
@@ -187,6 +198,67 @@ function checkDraw(table) {
   if (count === 25) {
     alert("It's draw!");
     clearTable(table);
+    ClearTimeout();
     counter = 0;
   }
+}
+
+/*function move() {
+  clearInterval(id)
+  clearWidth();
+  id = setInterval(frame, 100);
+  function frame(){
+    if (width >= 100) {
+      clearWidth();
+      clearInterval(id);
+    } else {
+      //width = width + 4;
+      width++
+      elem.style.width = width + "%";
+      elem.innerHTML = width + "%";
+    }
+  }
+}*/
+
+function clearWidth() {
+  width = 0;
+  elem.style.width = width + "%";
+  elem.innerHTML = width + "%";
+}
+
+function updateClock() {
+  clock.innerHTML = 10 - clockCounter;
+  clockCounter++;
+}
+
+function changeTurn() {
+  clearInterval(id);
+  clearWidth();
+  id = setInterval(frame, 100);
+  function frame() {
+    if (width >= 100) {
+      clearWidth();
+      clearInterval(id);
+    } else {
+      width++;
+      elem.style.width = width + "%";
+      elem.innerHTML = width + "%";
+    }
+  }
+
+  clockCounter = 0;
+  clearInterval(timeinterval);
+  timeinterval = setInterval(updateClock, 1000);
+  timeoutID = setTimeout(alertTimeout, 10000);
+  updateClock();
+}
+
+function alertTimeout() {
+  counter++;
+  alert("Timeout!");
+  changeTurn();
+}
+
+function ClearTimeout() {
+  clearTimeout(timeoutID);
 }

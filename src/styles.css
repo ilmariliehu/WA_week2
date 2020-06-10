@@ -5,4 +5,35 @@ body {
 table {
   margin-left: auto;
   margin-right: auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td {
+  border: 1px solid black;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  font: "Helvetica";
+  font-size: 30px;
+}
+
+#ProgressBar {
+  width: 316px;
+  background-color: lightgrey;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#InnerProgressBar {
+  width: 0%;
+  height: 30px;
+  background-color: darkred;
+  text-align: center; /* To center it horizontally (if you want) */
+  line-height: 30px; /* To center it vertically */
+  color: white;
+}
+
+td:hover {
+  background-color: lightgray;
 }
